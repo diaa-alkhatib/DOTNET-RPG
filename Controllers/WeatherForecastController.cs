@@ -1,32 +1,32 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
-namespace DOTNET_RPG.Controllers
+namespace DOTNET_RPG.Controllers;
+
+[ApiController]
+[Route("[controller]")]
+public class WeatherForecastController : ControllerBase
 {
-    [Route("[controller]")]
-    public class WeatherForecastController : Controller
+    private static readonly string[] Summaries = new[]
     {
-        private readonly ILogger<WeatherForecastController> _logger;
+        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+    };
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
-        {
-            _logger = logger;
-        }
+    private readonly ILogger<WeatherForecastController> _logger;
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+    public WeatherForecastController(ILogger<WeatherForecastController> logger)
+    {
+        _logger = logger;
+    }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+    [HttpGet(Name = "GetWeatherForecast")]
+    public IEnumerable<WeatherForecast> Get()
+    {
+        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
         {
-            return View("Error!");
-        }
+            Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+            TemperatureC = Random.Shared.Next(-20, 55),
+            Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+        })
+        .ToArray();
     }
 }
