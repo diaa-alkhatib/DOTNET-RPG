@@ -1,3 +1,5 @@
+namespace DOTNET_RPG;
+
 public class WeatherForecast
 {
     public DateOnly Date { get; set; }
